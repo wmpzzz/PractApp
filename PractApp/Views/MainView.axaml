@@ -13,9 +13,7 @@
                 <Setter Property="Foreground" Value="Blue"/>
                 <Setter Property="Template">
                     <ControlTemplate>
-                        <TextBlock Text="{TemplateBinding Content}" 
-                                   Cursor="Hand" 
-                                   x:Name="PART_Text"/>
+                        <TextBlock Text="{TemplateBinding Content}" Cursor="Hand" x:Name="PART_Text"/>
                     </ControlTemplate>
                 </Setter>
             </Style>
