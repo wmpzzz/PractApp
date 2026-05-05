@@ -1,0 +1,35 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:PractApp.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="PractApp.Views.MainView">
+        <UserControl.Styles>
+            <Style Selector="Button.link">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Padding" Value="0"/>
+                <Setter Property="Foreground" Value="Blue"/>
+                <Setter Property="Template">
+                    <ControlTemplate>
+                        <TextBlock Text="{TemplateBinding Content}" 
+                                   Cursor="Hand" 
+                                   x:Name="PART_Text"/>
+                    </ControlTemplate>
+                </Setter>
+            </Style>
+            <Style Selector="Button.link:pointerover /template/ TextBlock#PART_Text">
+                <Setter Property="Foreground" Value="Navy"/>
+                <Setter Property="TextDecorations" Value="Underline"/>
+            </Style>
+            <Style Selector="Button.link:pointerover">
+                <Setter Property="Background" Value="Transparent"/>
+            </Style>
+        </UserControl.Styles>
+
+          <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+	        <Button Content="Войти" Margin="0,0,0,15" HorizontalAlignment="Center" x:Name="AuthorizationButton" Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).GoToLoginCommand}"/>
+            <Button Content="Нет аккаунта? Регистрация" Classes="link" HorizontalAlignment="Center" x:Name="RegistrationButton" Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).GoToRegistrationCommand}"/>
+        </StackPanel>
+</UserControl>
