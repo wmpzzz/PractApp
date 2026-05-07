@@ -1,53 +1,78 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Npgsql;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace PractApp.ViewModels
 {
     public partial class LoginViewModel : ViewModelBase
     {
+        private readonly string _connectionString = "Host=pg4.sweb.ru;Port=5433;Database=wmpzbebra2;Username=wmpzbebra2;Password=LUdmila29";
+
         [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [Required(ErrorMessage = "Введите логин")]
         private string? _login;
+
         [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [Required(ErrorMessage = "Введите пароль")]
         private string? _password;
+
         [ObservableProperty]
         private string _message = "";
 
         [RelayCommand]
-        private void DoLogin()
+        private async Task LoginAsync()
         {
-            if (!File.Exists("user.csv"))
-            {
-                Message = "нет файла";
+            ValidateAllProperties();
+            if (HasErrors)
                 return;
-            }
 
-            var lines = File.ReadAllLines("user.csv");
-            bool isAuth = false;
-            foreach(var line in lines)
+            try
             {
-                var parts = line.Split(';');
-                if(parts.Length>=3 && parts[0] == Login && parts[1] == Password)
-                {
-                    
-                    isAuth = true;
-                    break;
-                }
-             
+                using var conn = new NpgsqlConnection(_connectionString);
+                await conn.OpenAsync();
 
-            }
-            if (isAuth)
-            {
-                if (Avalonia.Application.Current?.ApplicationLifetime is Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime desktop)
+                string sql = "SELECT password_hash FROM \"user\" WHERE login = @login";
+                using var cmd = new NpgsqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("login", Login!);
+
+                using var reader = await cmd.ExecuteReaderAsync();
+
+                if (await reader.ReadAsync())
                 {
-                    if (desktop.MainWindow?.DataContext is MainWindowViewModel mainVm)
+                    string savedHash = reader.GetString(0);
+                    bool isPasswordValid = BCrypt.Net.BCrypt.Verify(Password, savedHash);
+
+                    if (isPasswordValid)
                     {
-                        mainVm.GoToMainApp();
+                        Message = "Авторизация успешна!";
+                        await Task.Delay(1000);
+
+                        if (MainWindowViewModel.Instance != null)
+                        {
+                            MainWindowViewModel.Instance.CurrentPage = new AppViewModel();
+                        }
+                    }
+                    else
+                    {
+                        Message = "Неверный логин или пароль.";
                     }
                 }
+                else
+                {
+                    Message = "Неверный логин или пароль.";
+                }
+            }
+            catch (Exception ex)
+            {
+                Message = $"Ошибка подключения: {ex.Message}";
             }
         }
     }

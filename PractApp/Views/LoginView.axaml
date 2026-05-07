@@ -33,7 +33,7 @@
                 <TextBox Watermark="Введите ваш логин" Text="{Binding Login}"/>
                 <TextBlock Text="Пароль" FontSize="12" FontWeight="SemiBold" Margin="5,0,0,0"/>
                 <TextBox Watermark="••••••••" PasswordChar="●" Text="{Binding Password}"/>
-                <Button Content="Войти" Margin="0,10,0,0" Command="{Binding DoLoginCommand}"/>
+                <Button Content="Войти" Margin="0,10,0,0" Command="{Binding LoginCommand}"/>
             <TextBlock Text="{Binding Message}"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button Content="Нет учетной записи? Создать аккаунт" Classes="link" Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).GoToRegistrationCommand}"/>

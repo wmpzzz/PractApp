@@ -6,11 +6,13 @@ namespace PractApp.ViewModels
     public partial class MainWindowViewModel : ViewModelBase
     {
         [ObservableProperty]
-        private ViewModelBase _currentPage;
+        private ViewModelBase _currentPage = new MainViewModel();
+
+        public static MainWindowViewModel? Instance { get; set; }
 
         public MainWindowViewModel()
         {
-            _currentPage = new MainViewModel();
+            Instance = this;
         }
 
         [RelayCommand]

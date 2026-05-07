@@ -38,17 +38,21 @@
                            Margin="0,0,0,25"/>
 
                 <TextBlock Text="Логин" FontSize="12" Foreground="Gray" Margin="5,0,0,0" />
-                <TextBox Watermark="Придумайте логин" Text="{Binding RegLogin}"/>
+                <TextBox PlaceholderText="Придумайте логин" Text="{Binding RegLogin}"/>
 
                 <TextBlock Text="Email" FontSize="12" Foreground="Gray" Margin="5,0,0,0"/>
-                <TextBox Watermark="example@mail.com" Text="{Binding RegEmail}"/>
+                <TextBox PlaceholderText="example@mail.com" Text="{Binding RegEmail}"/>
 
                 <TextBlock Text="Пароль" FontSize="12" Foreground="Gray" Margin="5,0,0,0" />
-                <TextBox PasswordChar="*" Watermark="Минимум 6 символов" Text="{Binding RegPassword}"/>
+                <TextBox PasswordChar="*" PlaceholderText="Минимум 6 символов" Text="{Binding RegPassword}"/>
 
                 <Button Content="Зарегистрироваться" 
                         Margin="0,10,0,0"
                         Command="{Binding RegisterCommand}"/>
+                <TextBlock Text="{Binding Message}"
+                           Foreground="Red"
+                           TextWrapping="Wrap"
+                           HorizontalAlignment="Center"/>
 
                 <Button Content="Уже есть аккаунт? Войти" 
                         Classes="link" 
