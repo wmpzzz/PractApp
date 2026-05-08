@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using MsBox.Avalonia;
 using Npgsql;
 using System;
 using System.Collections.Generic;
@@ -23,9 +24,6 @@ namespace PractApp.ViewModels
         [NotifyDataErrorInfo]
         [Required(ErrorMessage = "Введите пароль")]
         private string? _password;
-
-        [ObservableProperty]
-        private string _message = "";
 
         [RelayCommand]
         private async Task LoginAsync()
@@ -52,7 +50,8 @@ namespace PractApp.ViewModels
 
                     if (isPasswordValid)
                     {
-                        Message = "Авторизация успешна!";
+                        var messageBox = MessageBoxManager.GetMessageBoxStandard("Сообщение", "Успешная авторизация", MsBox.Avalonia.Enums.ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Success);
+                        var result = messageBox.ShowAsync();
                         await Task.Delay(1000);
 
                         if (MainWindowViewModel.Instance != null)
@@ -62,17 +61,20 @@ namespace PractApp.ViewModels
                     }
                     else
                     {
-                        Message = "Неверный логин или пароль.";
+                        var messageBox = MessageBoxManager.GetMessageBoxStandard("Ошибка", "Неверный логин или пароль", MsBox.Avalonia.Enums.ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error);
+                        var result = messageBox.ShowAsync();
                     }
                 }
                 else
                 {
-                    Message = "Неверный логин или пароль.";
+                    var messageBox = MessageBoxManager.GetMessageBoxStandard("Ошибка", "Неверный логин или пароль", MsBox.Avalonia.Enums.ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error);
+                    var result = messageBox.ShowAsync();
                 }
             }
             catch (Exception ex)
             {
-                Message = $"Ошибка подключения: {ex.Message}";
+                var messageBox = MessageBoxManager.GetMessageBoxStandard("Ошибка", "Ошибка подключения: {ex.Message}", MsBox.Avalonia.Enums.ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error);
+                var result = messageBox.ShowAsync();
             }
         }
     }

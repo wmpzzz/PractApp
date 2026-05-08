@@ -3,62 +3,96 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:PractApp.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="600"
              x:Class="PractApp.Views.RegistrationView"
              x:DataType="vm:RegistrationViewModel">
   
-        <UserControl.Styles>
-            <Style Selector="Button.link">
-                <Setter Property="Background" Value="Transparent"/>
-                <Setter Property="BorderThickness" Value="0"/>
-                <Setter Property="Padding" Value="0"/>
-                <Setter Property="Foreground" Value="Blue"/>
-                <Setter Property="Template">
-                    <ControlTemplate>
-                        <TextBlock Text="{TemplateBinding Content}" 
-                                   Cursor="Hand" 
-                                   x:Name="PART_Text"/>
-                    </ControlTemplate>
-                </Setter>
-            </Style>
-            <Style Selector="Button.link:pointerover /template/ TextBlock#PART_Text">
-                <Setter Property="Foreground" Value="Navy"/>
-                <Setter Property="TextDecorations" Value="Underline"/>
-            </Style>
-            <Style Selector="Button.link:pointerover">
-                <Setter Property="Background" Value="Transparent"/>
-            </Style>
-        </UserControl.Styles>
+    <UserControl.Styles>
+        <Style Selector="Button.link">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="Blue"/>
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <TextBlock Text="{TemplateBinding Content}" Cursor="Hand" x:Name="PART_Text"/>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+        <Style Selector="Button.link:pointerover /template/ TextBlock#PART_Text">
+            <Setter Property="Foreground" Value="Navy"/>
+            <Setter Property="TextDecorations" Value="Underline"/>
+        </Style>
+        <Style Selector="TextBox">
+            <Setter Property="Margin" Value="0,0,0,10"/>
+        </Style>
+    </UserControl.Styles>
 
-        <StackPanel>
-                <TextBlock Text="Создать аккаунт" 
-                           FontSize="24" 
-                           FontWeight="Bold" 
-                           HorizontalAlignment="Center" 
-                           Margin="0,0,0,25"/>
+    <ScrollViewer>
+        <StackPanel Margin="20" MaxWidth="350">
+            <TextBlock Text="Создать аккаунт" 
+                       FontSize="24" 
+                       FontWeight="Bold" 
+                       HorizontalAlignment="Center" 
+                       Margin="0,0,0,25"/>
 
-                <TextBlock Text="Логин" FontSize="12" Foreground="Gray" Margin="5,0,0,0" />
+            <StackPanel IsVisible="{Binding !IsVerificationVisible}">
+                <TextBlock Text="Логин" FontSize="12" Foreground="Gray" Margin="5,0" />
                 <TextBox PlaceholderText="Придумайте логин" Text="{Binding RegLogin}"/>
 
-                <TextBlock Text="Email" FontSize="12" Foreground="Gray" Margin="5,0,0,0"/>
+                <TextBlock Text="Email" FontSize="12" Foreground="Gray" Margin="5,0"/>
                 <TextBox PlaceholderText="example@mail.com" Text="{Binding RegEmail}"/>
 
-                <TextBlock Text="Пароль" FontSize="12" Foreground="Gray" Margin="5,0,0,0" />
-                <TextBox PasswordChar="*" PlaceholderText="Минимум 6 символов" Text="{Binding RegPassword}"/>
+                <TextBlock Text="Пароль" FontSize="12" Foreground="Gray" Margin="5,0" />
+                <TextBox PasswordChar="*" PlaceholderText="Минимум 8 символов" Text="{Binding RegPassword}"/>
 
-                <Button Content="Зарегистрироваться" 
+                <TextBlock Text="Фамилия" FontSize="12" Foreground="Gray" Margin="5,0" />
+                <TextBox PlaceholderText="Введите фамилию" Text="{Binding RegSurname}"/>
+
+                <TextBlock Text="Имя" FontSize="12" Foreground="Gray" Margin="5,0" />
+                <TextBox PlaceholderText="Введите имя" Text="{Binding RegName}"/>
+
+                <TextBlock Text="Отчество" FontSize="12" Foreground="Gray" Margin="5,0" />
+                <TextBox PlaceholderText="Введите отчество" Text="{Binding RegPatronymic}"/>
+
+                <Button Content="Получить код подтверждения" 
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center"
                         Margin="0,10,0,0"
-                        Command="{Binding RegisterCommand}"/>
-                <TextBlock Text="{Binding Message}"
-                           Foreground="Red"
-                           TextWrapping="Wrap"
-                           HorizontalAlignment="Center"/>
-
-                <Button Content="Уже есть аккаунт? Войти" 
-                        Classes="link" 
-                        Margin="0,15,0,0"
-                        HorizontalAlignment="Center"
-                        Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).GoToLoginCommand}"/>
+                        Command="{Binding SendCodeCommand}"/>
             </StackPanel>
 
+            <StackPanel IsVisible="{Binding IsVerificationVisible}" Spacing="10">
+                <Border Background="#E3F2FD" CornerRadius="8" Padding="15">
+                    <StackPanel Spacing="10">
+                        <TextBlock Text="Код отправлен на почту" FontWeight="Bold" HorizontalAlignment="Center" Foreground="#1976D2"/>
+                        
+                        <TextBox PlaceholderText="Введите 6 цифр" 
+                                 Text="{Binding InputCode}"
+                                 FontSize="20"
+                                 HorizontalContentAlignment="Center"
+                                 LetterSpacing="5"
+                                 MaxLength="6"/>
+
+                        <Button Content="Подтвердить и зарегистрироваться" 
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Center"
+                                Background="#2E7D32"
+                                Foreground="White"
+                                Command="{Binding RegisterCommand}"/>
+                        
+                        <Button Content="Изменить данные" 
+                                Classes="link"
+                                HorizontalAlignment="Center"
+                                Command="{Binding BackToEditCommand}"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+
+            <Button Content="Уже есть аккаунт? Войти" 
+                    Classes="link" 
+                    Margin="0,20,0,0"
+                    HorizontalAlignment="Center"
+                    Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).GoToLoginCommand}"/>
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>
