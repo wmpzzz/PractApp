@@ -29,52 +29,53 @@ namespace PractApp.ViewModels
         private async Task LoginAsync()
         {
             ValidateAllProperties();
-            if (HasErrors)
-                return;
+            if (HasErrors) return;
 
             try
             {
-                using var conn = new NpgsqlConnection(_connectionString);
-                await conn.OpenAsync();
+                using var connection = new NpgsqlConnection(_connectionString);
+                await connection.OpenAsync();
 
-                string sql = "SELECT password_hash FROM \"user\" WHERE login = @login";
-                using var cmd = new NpgsqlCommand(sql, conn);
-                cmd.Parameters.AddWithValue("login", Login!);
+                string sql = "SELECT password_hash, role FROM \"user\" WHERE login = @login";
+                using var cmd = new NpgsqlCommand(sql, connection);
+                cmd.Parameters.AddWithValue("login", Login ?? string.Empty);
 
                 using var reader = await cmd.ExecuteReaderAsync();
 
                 if (await reader.ReadAsync())
                 {
                     string savedHash = reader.GetString(0);
+                    string userRole = reader.IsDBNull(1) ? "user" : reader.GetString(1);
+
                     bool isPasswordValid = BCrypt.Net.BCrypt.Verify(Password, savedHash);
 
                     if (isPasswordValid)
                     {
                         var messageBox = MessageBoxManager.GetMessageBoxStandard("Сообщение", "Успешная авторизация", MsBox.Avalonia.Enums.ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Success);
-                        var result = messageBox.ShowAsync();
+                        await messageBox.ShowAsync();
                         await Task.Delay(1000);
 
                         if (MainWindowViewModel.Instance != null)
                         {
-                            MainWindowViewModel.Instance.CurrentPage = new AppViewModel();
+                            MainWindowViewModel.Instance.GoToMainApp(userRole);
                         }
                     }
                     else
                     {
                         var messageBox = MessageBoxManager.GetMessageBoxStandard("Ошибка", "Неверный логин или пароль", MsBox.Avalonia.Enums.ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error);
-                        var result = messageBox.ShowAsync();
+                        await messageBox.ShowAsync();
                     }
                 }
                 else
                 {
                     var messageBox = MessageBoxManager.GetMessageBoxStandard("Ошибка", "Неверный логин или пароль", MsBox.Avalonia.Enums.ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error);
-                    var result = messageBox.ShowAsync();
+                    await messageBox.ShowAsync();
                 }
             }
             catch (Exception ex)
             {
-                var messageBox = MessageBoxManager.GetMessageBoxStandard("Ошибка", "Ошибка подключения: {ex.Message}", MsBox.Avalonia.Enums.ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error);
-                var result = messageBox.ShowAsync();
+                var messageBox = MessageBoxManager.GetMessageBoxStandard("Ошибка", $"Ошибка подключения: {ex.Message}", MsBox.Avalonia.Enums.ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error);
+                await messageBox.ShowAsync();
             }
         }
     }

@@ -1,0 +1,33 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="PractApp.Views.AdminView">
+    <Grid RowDefinitions="Auto, *">
+		<Border Grid.Row="0" Background="#2c3e50" Padding="15">
+			<StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+				<TextBlock Text="⚙️" FontSize="24"/>
+				<TextBlock Text="Панель администратора системы" FontSize="20" Foreground="White" FontWeight="Bold"/>
+			</StackPanel>
+		</Border>
+
+		<TabControl Grid.Row="1" Margin="10">
+			<TabItem Header="Управление">
+				<StackPanel Margin="10" Spacing="10">
+					<TextBlock Text="Список зарегистрированных пользователей:" FontWeight="SemiBold"/>
+					<ListBox Height="200">
+						<ListBoxItem Content="user_login (Роль: Пользователь)"/>
+						<ListBoxItem Content="test_account (Роль: Пользователь)"/>
+					</ListBox>
+					<StackPanel Orientation="Horizontal" Spacing="10">
+						<Button Content="Заблокировать" Background="#e74c3c" Foreground="White"/>
+						<Button Content="Сбросить пароль"/>
+					</StackPanel>
+				</StackPanel>
+			</TabItem>
+		</TabControl>
+	</Grid>
+
+
+</UserControl>

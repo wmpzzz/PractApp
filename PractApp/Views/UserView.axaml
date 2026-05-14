@@ -1,0 +1,32 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="PractApp.Views.UserView">
+  <Grid RowDefinitions="Auto, *">
+		<Border Grid.Row="0" Background="#27ae60" Padding="15">
+			<StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+				<TextBlock Text="👤" FontSize="24"/>
+				<TextBlock Text="Личный кабинет пользователя" FontSize="20" Foreground="White" FontWeight="Bold"/>
+			</StackPanel>
+		</Border>
+
+		<Grid Grid.Row="1" ColumnDefinitions="250, *" Margin="15">
+			<StackPanel Grid.Column="0" Spacing="5" Margin="0,0,15,0">
+				<Button Content="Мой профиль" HorizontalAlignment="Stretch" Padding="10"/>
+				<Button Content="История заказов" HorizontalAlignment="Stretch" Padding="10"/>
+				<Button Content="Настройки" HorizontalAlignment="Stretch" Padding="10"/>
+			</StackPanel>
+			
+			<Border Grid.Column="1" Background="#f8f9fa" CornerRadius="5" Padding="20">
+				<StackPanel Spacing="10">
+					<TextBlock Text="Добро пожаловать в систему!" FontSize="18" FontWeight="SemiBold"/>
+					<TextBlock Text="Вам доступен стандартный набор функций приложения." Foreground="Gray"/>
+					<Separator Margin="0,10"/>
+					<TextBlock Text="Ваш статус аккаунта: Активен" Foreground="#27ae60"/>
+				</StackPanel>
+			</Border>
+		</Grid>
+	</Grid>
+</UserControl>

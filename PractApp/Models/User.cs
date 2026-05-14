@@ -12,6 +12,5 @@ namespace PractApp.Models
         public string? Password { get; set; }
         public string? Email { get; set; }
 
-        public string toCsv() => $"{Login};{Password};{Email}";
     }
 }

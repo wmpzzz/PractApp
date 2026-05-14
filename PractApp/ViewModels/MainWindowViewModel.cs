@@ -26,9 +26,9 @@ namespace PractApp.ViewModels
             CurrentPage = new RegistrationViewModel();
         }
         [RelayCommand]
-        public void GoToMainApp()
+        public void GoToMainApp(string role)
         {
-            CurrentPage = new AppViewModel();
+            CurrentPage = new AppViewModel(role);
         }
 
     }
