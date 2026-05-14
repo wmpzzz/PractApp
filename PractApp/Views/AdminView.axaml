@@ -2,32 +2,66 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:vm="using:PractApp.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="PractApp.Views.AdminView">
-    <Grid RowDefinitions="Auto, *">
+             x:Class="PractApp.Views.AdminView"
+			 x:DataType="vm:AdminViewModel">
+
+    	<Grid RowDefinitions="Auto, *, Auto">
+	
 		<Border Grid.Row="0" Background="#2c3e50" Padding="15">
 			<StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
-				<TextBlock Text="⚙️" FontSize="24"/>
-				<TextBlock Text="Панель администратора системы" FontSize="20" Foreground="White" FontWeight="Bold"/>
+				<TextBlock Text="Панель администратора" FontSize="20" Foreground="White" FontWeight="Bold"/>
 			</StackPanel>
 		</Border>
+		<DataGrid Grid.Row="1" 
+                  Margin="15"
+                  ItemsSource="{Binding DataList}" 
+                  SelectedItem="{Binding SelectedData}"
+                  AutoGenerateColumns="False" 
+                  GridLinesVisibility="All"
+                  BorderThickness="1" 
+                  BorderBrush="LightGray"
+                  CanUserSortColumns="True">
+			<DataGrid.Columns>
+				<DataGridTextColumn Header="ID" Binding="{Binding Id}" IsReadOnly="True" Width="60"/>
+				<DataGridTextColumn Header="ФИО собственника / наемщика" Binding="{Binding Fio}" Width="250"/>
+				<DataGridTextColumn Header="Лицевой счет" Binding="{Binding PersonalAccount}" Width="150"/>
+				<DataGridTextColumn Header="Адрес жилья" Binding="{Binding Address}" Width="*"/>
+				<DataGridTextColumn Header="Кв." Binding="{Binding Apartment}" Width="80"/>
+				<DataGridCheckBoxColumn Header="Наемщик жилья" Binding="{Binding IsTenant}" Width="140"/>
+			</DataGrid.Columns>
+		</DataGrid>
 
-		<TabControl Grid.Row="1" Margin="10">
-			<TabItem Header="Управление">
-				<StackPanel Margin="10" Spacing="10">
-					<TextBlock Text="Список зарегистрированных пользователей:" FontWeight="SemiBold"/>
-					<ListBox Height="200">
-						<ListBoxItem Content="user_login (Роль: Пользователь)"/>
-						<ListBoxItem Content="test_account (Роль: Пользователь)"/>
-					</ListBox>
-					<StackPanel Orientation="Horizontal" Spacing="10">
-						<Button Content="Заблокировать" Background="#e74c3c" Foreground="White"/>
-						<Button Content="Сбросить пароль"/>
-					</StackPanel>
+		<Border Grid.Row="2" Background="#f8f9fa" Padding="15" BorderThickness="0,1,0,0" BorderBrush="#e0e0e0">
+			<Grid ColumnDefinitions="Auto, *, Auto">
+				
+				<StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="10">
+					<Button Content="Добавить счет" 
+                            Command="{Binding AddAccountRowCommand}" 
+                            Background="#27ae60" 
+                            Foreground="White" 
+                            Padding="12,6"/>
+					<Button Content="Удалить выбранный" 
+                            Command="{Binding DeleteAccountRowCommand}" 
+                            Background="#e74c3c" 
+                            Foreground="White" 
+                            Padding="12,6"/>
 				</StackPanel>
-			</TabItem>
-		</TabControl>
+
+				<StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="10">
+					<Button Content="Открыть файл..." 
+                            Command="{Binding LoadFromFileCommand}" 
+                            Padding="12,6"/>
+					<Button Content="Сохранить как..." 
+                            Command="{Binding SaveToFileCommand}" 
+                            Background="#2980b9" 
+                            Foreground="White" 
+                            FontWeight="Bold" 
+                            Padding="18,6"/>
+				</StackPanel>
+				
+			</Grid>
+		</Border>
 	</Grid>
-
-
 </UserControl>

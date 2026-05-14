@@ -8,7 +8,7 @@ using System.Text;
 
 namespace PractApp.Models
 {
-    public class Data : ViewModelBase
+    public partial class Data : ObservableObject
     {
         [ObservableProperty] private int _id;
         [ObservableProperty] private string _fio = string.Empty;
